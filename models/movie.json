@@ -8,4 +8,14 @@
 	"flash":"视频地址",
 	"languaue":"语言",
 	"summary":"简介"
+},{
+	"_id":2,
+	"title":"标题",
+	"doctor":"导演",
+	"country":"国家",
+	"year":2011,
+	"poster":"海报地址",
+	"flash":"视频地址",
+	"languaue":"语言",
+	"summary":"简介"
 }
