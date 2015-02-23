@@ -1,0 +1,21 @@
+extends ../layout
+
+block content
+	.container.main
+		.row
+			table.table.table-hover.table-bordered
+				thead
+					tr
+						th 名字
+						th 时间
+						th 电影数（部）
+						th 修改
+						th 删除
+				tbody
+					each cate in categories
+						tr(class="cate-id-#{cate._id}")
+							td.name #{cate.name}
+							td #{moment(cate.meta.creatAt).format("YYYY-MM-DD")}
+							td.detial #{cate.movies.length}
+							td.update: a(target="_blank",href="../admin/update/#{cate._id}") 修改
+							td.delete: button.btn.btn-xs.btn-danger.del(type="button",data-id="#{cate._id}") 删除

@@ -1,0 +1,13 @@
+.container
+	.row
+		.page-header
+			ul.nav.nav-pills
+				li.active(role='presentation'): a(href='/') 首页
+				li(role='presentation'): a(href='/admin/movie/list') 列表
+				li(role='presentation'): a(href='/admin/movie/new') 录入电影
+				li(class='search col-sm-4 pull-right')
+					form(method='get',action='/results')
+						.input-group.col-sm-12
+							input.form-control(type='text',name='keyword')
+							span.input-group-btn
+								button.btn.btn-primary(type='submit') 搜索

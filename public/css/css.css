@@ -1,0 +1,17 @@
+.underline{
+	text-decoration: underline;
+}
+
+.main{
+	padding-bottom: 80px;
+}
+.article .introList dt,
+.article .introList dd{
+	margin-bottom: 2px;
+}
+.article .comment{
+	margin-top: 30px;
+}
+.user-portrait{
+	display: block;
+}

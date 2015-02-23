@@ -1,0 +1,38 @@
+extends ../layout
+
+block content
+	.container.main
+		.row
+			.panel.panel-default
+				.panel-heading
+					h3 搜索“#{keyword}”电影
+					.panel-body
+						if cateId
+							input(type="hidden",value="#{cateId}")
+						if movies && movies.length > 0
+							each item in movies
+								.col-md-2
+									.thumbnail
+										a(href="/movie/#{item._id}")
+											if item.poster.indexOf('http') >-1
+												img(src="#{item.poster}",alt="#{item.title}")
+											else
+												img(src="/upload/#{item.poster}",alt="#{item.title}")
+										.caption
+											h3 #{item.title}
+												p: a.btn.btn-primary(href="/movie/#{item._id}",role="button") 观看预告片
+			ul.pagination
+				- for(var i=0;i<totalPage;i++){
+					- var idx = i+1;
+					- if(currentPage == idx){
+						li.active
+							span #{currentPage}
+					-  }else{
+						if cateId
+							li 
+								a(href='/results?cate=#{cateId}&p=#{i}') #{idx}
+						else
+							li
+								a(href='/results?keyword=#{keyword}&p=#{i}') #{idx}
+					-}
+				- }
