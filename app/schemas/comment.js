@@ -5,20 +5,20 @@ var ObjectId = Schema.Types.ObjectId;
 var CommentSchema = new mongoose.Schema({
 	movie: {
 		type: ObjectId,
-		ref: 'Movie' // 指向Movie这个模型
+		ref: "Movie" // 指向Movie这个模型
 	},
 	from: {
 		type: ObjectId,
-		ref: 'User'
+		ref: "User"
 	},
 	reply: [{
 		from: {
 			type: ObjectId,
-			ref: 'User'
+			ref: "User"
 		},
 		to: {
 			type: ObjectId,
-			ref: 'User'
+			ref: "User"
 		},
 		content: String
 	}],

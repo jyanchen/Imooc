@@ -19,7 +19,7 @@ exports.save = function(req, res) {
 					console.log(err);
 				}
 
-				res.redirect('/movie/' + movieId)
+				res.redirect("/movie/" + movieId)
 			})
 		});
 	} else { // 新的评论，即对电影本身的评论
@@ -30,7 +30,7 @@ exports.save = function(req, res) {
 				console.log(err);
 			}
 
-			res.redirect('/movie/' + movieId)
+			res.redirect("/movie/" + movieId)
 		});
 	}
 };

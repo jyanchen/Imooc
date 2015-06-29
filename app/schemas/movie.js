@@ -3,23 +3,24 @@ var Schema = mongoose.Schema;
 var ObjectId = Schema.Types.ObjectId;
 
 var MovieSchema = new Schema({
-	doctor: String,
-	title: String,
-	languaue: String,
-	summary: String,
-	flash: String,
-	poster: String,
-	year: String,
-	country: String,
-	pv: {
+	doctor: String, // 导演
+	title: String, // 电影名
+	languaue: String, // 语种
+	summary: String, // 简介
+	flash: String, // 电影短片或相关视频
+	poster: String, // 海报
+	year: String, // 年份
+	country: String, // 制片国家/地区
+	DouBanId: String, // 豆瓣的电影ID
+	pv: { // 浏览数
 		type:Number,
 		default:0
 	},
-	category: {
+	category: { // 分类
 		type: ObjectId,
-		ref: 'Category'
+		ref: "Category"
 	},
-	meta: {
+	meta: { // 时间戳
 		createAt: {
 			type: Date,
 			default: Date.now()
@@ -46,7 +47,7 @@ MovieSchema.statics = {
 		return this
 			.find({})
 			.sort({
-				'meta.updateAt': -1
+				"meta.updateAt": -1
 			})
 			.exec(cb)
 	},

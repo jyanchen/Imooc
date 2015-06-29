@@ -9,16 +9,40 @@ var mongoStore = require('connect-mongo')(session);
 var port = process.env.PORT || 3000;
 var app = express();
 var multipart = require('connect-multiparty');
+var fs = require('fs');
 var dburl = "mongodb://localhost/imooc";
 
 // 连接数据库
 mongoose.connect(dburl);
 
+var isDev = true;
+
+// 加载模型
+var models_path = __dirname + '/app/models';
+var walk = function(path) {
+    fs
+        .readdirSync(path)
+        .forEach(function(file) {
+            var newPath = path + '/' + file;
+            var stat = fs.statSync(newPath);
+
+            if (stat.isFile()) {
+                if (/(.*)\.(js|coffee)/.test(file)) {
+                    require(newPath)
+                }
+            } else if (stat.isDirectory()) {
+                walk(newPath);
+            }
+        })
+}
+walk(models_path);
+
 // 配置jade模版引擎
 app.set("views", "./app/views/pages");
 app.set("view engine", "jade");
+
 app.use(bodyParser.urlencoded({
-	extended: true
+    extended: true
 }));
 app.use(multipart());
 app.use(bodyParser.json());
@@ -26,20 +50,22 @@ app.use(bodyParser.json());
 // cookie相关的配置
 app.use(cookieParser());
 app.use(session({
-	secret: 'imooc',
-	store: new mongoStore({
-		url: dburl,
-		conlection: 'session'
-	})
+    secret: 'imooc',
+    resave: true,
+    saveUninitialized: true,
+    store: new mongoStore({
+        url: dburl,
+        conlection: 'session'
+    })
 }));
 
-if('development' == app.get('env')){
-	// 记录错误栈。true：把错误打印在屏幕
-	app.set('showStackError',true);
-	// 记录请求的方式、URL地址、状态
-	app.use(logger(':method :url :status'));
-	app.locals.pretty = true;
-	mongoose.set('debug'.true);
+if ('development' == app.get('env')) {
+    // 记录错误栈。true：把错误打印在屏幕
+    app.set('showStackError', true);
+    // 记录请求的方式、URL地址、状态
+    app.use(logger(':method :url :status'));
+    app.locals.pretty = true;
+    mongoose.set('debug'.true);
 }
 
 // 导入路由文件
@@ -49,5 +75,14 @@ app.listen(port);
 app.locals.moment = require('moment');
 app.use(express.static(path.join(__dirname, "public")));
 
-console.log("imooc started on port " + port);
+if(isDev){
+    var bs = require('browser-sync').create();
+    bs.watch(["app/views/**","public/css/**"]).on("change", function() {
+        bs.reload();
+    });
+    bs.init({
+        proxy: "localhost:4000"
+    });
+}
 
+console.log("imooc started on port " + port);

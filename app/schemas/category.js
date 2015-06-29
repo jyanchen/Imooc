@@ -6,7 +6,7 @@ var CategorySchema = new Schema({
 	name: String,
 	movies: [{
 		type: ObjectId,
-		ref: 'Movie'
+		ref: "Movie"
 	}],
 	meta: {
 		createAt: {
@@ -34,7 +34,7 @@ CategorySchema.statics = {
 	fetch: function(cb) {
 		return this
 			.find({})
-			.sort({'meta.updateAt':-1})
+			.sort({"meta.updateAt":-1})
 			.exec(cb)
 	},
 	findById: function(id, cb) {

@@ -21,8 +21,8 @@ exports.detail = function(req, res) {
 			.find({
 				movie: id
 			}) // 先找到电影的id,即关于这部电影的所有信息
-			.populate('from', 'name') // 通过Mongodb的populate关联查询，查找出评论者的名字
-			.populate('reply.from reply.to', 'name')
+			.populate("from", "name") // 通过Mongodb的populate关联查询，查找出评论者的名字
+			.populate("reply.from reply.to", "name")
 			.exec(function(err, comments) {
 				res.render("detail", {
 					title: "imooc " + movie.title,
@@ -53,8 +53,8 @@ exports.update = function(req, res) {
 	if (id) {
 		Movie.findById(id, function(err, movie) {
 			Category.find({}, function(err, categories) {
-				res.render('admin', {
-					title: 'imooc 后台更新页',
+				res.render("admin", {
+					title: "imooc 后台更新页",
 					movie: movie,
 					categories: categories
 				});
@@ -76,20 +76,20 @@ exports.savePoster = function(req, res, next) {
 	if (originalFileName) {
 		fs.readFile(filePath, function(err, data) {
 			var timeStamp = Date.now(); // 创建一个时间戳，默认为poster的名
-			var type = posterData.type.split('/')[1]; // 获取文件格式/后缀
-			var poster = timeStamp + '.' + type; // 新建一个poster对象
-			var newPath = path.join(__dirname, '../../', '/public/upload/' + poster); // poster的新路径（保存到本地的路径）
+			var type = posterData.type.split("/")[1]; // 获取文件格式/后缀
+			var poster = timeStamp + "." + type; // 新建一个poster对象
+			var newPath = path.join(__dirname, "../../", "/public/upload/" + poster); // poster的新路径（保存到本地的路径）
 
 			fs.writeFile(newPath, data, function(err) {
 				req.poster = poster; // 在请求头部添加一个poster值
 				next();
 			})
 		})
-	} else if (movieObj.poster.indexOf('http') > -1) {
+	} else if (movieObj.poster.indexOf("http") > -1) {
 		var server = http.createServer(function(req, res) {}).listen(50082);
 		http.get(movieObj.poster, function(res) {
 			var imgData = "";
-			var poster = Date.now() + (Math.floor(Math.random() * 3)) + '.jpg';
+			var poster = Date.now() + (Math.floor(Math.random() * 3)) + ".jpg";
 
 			res.setEncoding("binary"); //一定要设置response的编码为binary否则会下载下来的图片打不开
 
@@ -98,7 +98,7 @@ exports.savePoster = function(req, res, next) {
 			});
 
 			res.on("end", function() {
-				var newPath = path.join(__dirname, '../../', '/public/upload/' + poster);
+				var newPath = path.join(__dirname, "../../", "/public/upload/" + poster);
 				fs.writeFile(newPath, imgData, "binary", function(err) {
 					if (err) {
 						console.log(err);
@@ -119,7 +119,7 @@ exports.save = function(req, res) {
 	var movieObj = req.body.movie;
 	var id = movieObj._id;
 	var _movie = new Movie({});
-
+	
 	if (req.poster) {
 		movieObj.poster = req.poster;
 	}
@@ -129,7 +129,7 @@ exports.save = function(req, res) {
 		Movie.findById(id, function(err, movie) {
 			if (err)
 				console.log(err);
-			console.log('save :' + movieObj.poster);
+			console.log("save :" + movieObj.poster);
 			_movie = _.extend(movie, movieObj);
 			_movie.save(function(err, movie) {
 				if (err)
@@ -141,6 +141,8 @@ exports.save = function(req, res) {
 		_movie = new Movie(movieObj);
 		var categoryId = movieObj.category;
 		var categoryName = movieObj.categoryName;
+
+		console.log(_movie);
 
 		_movie.save(function(err, movie) {
 			if (err) {
@@ -190,14 +192,14 @@ exports.del = function(req, res) {
 	if (id) {
 		Movie.findOne({_id: id},function(err,movie){
 			// 获取电影的在本地额路径
-			var imgPath = path.join(__dirname, '../../', '/public/upload/' + movie.poster);
+			var imgPath = path.join(__dirname, "../../", "/public/upload/" + movie.poster);
 
 			// 在分类中删除该电影，应该在schemas的movie.js写（参照save）
 
 			// 在分类中删除该电影的ObjectId
 			Category.update({"_id": movie.category}, {$pull: {movies: movie._id}}, function(err){
 				if(err){
-					console.log('delete relate category movie,failed');
+					console.log("delete relate category movie,failed");
 				}else{
 					// 删除电影
 					Movie.remove({_id: id}, function(err, result){

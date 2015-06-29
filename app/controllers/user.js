@@ -22,7 +22,7 @@ exports.showSignup = function(req, res) {
 // 登录
 exports.showSignin = function(req, res) {
 	res.render("signin", {
-		title: '登录页面'
+		title: "登录页面"
 	})
 };
 
@@ -39,14 +39,14 @@ exports.signup = function(req, res) {
 		}
 
 		if (user) { // 用户已存在，返回首页
-			return res.redirect('/signin');
+			return res.redirect("/signin");
 		} else {
-			var user = new User(_user);
+			user = new User(_user);
 			user.save(function(err, user) {
 				if (err) {
 					console.log(err);
 				}
-				res.redirect('/');
+				res.redirect("/");
 			});
 		}
 	})
@@ -70,8 +70,8 @@ exports.signin = function(req, res) {
 		}
 
 		if (!user) {
-			console.log('用户不存在');
-			return res.redirect('/signup');
+			console.log("用户不存在");
+			return res.redirect("/signup");
 		}
 
 		// 用bcrypt，校验密码是否正确
@@ -83,10 +83,10 @@ exports.signin = function(req, res) {
 			if (isMatch) {
 				// 保存用户信息到session
 				req.session.user = user;
-				return res.redirect('/');
+				return res.redirect("/");
 			} else {
 				console.log("登录失败!!!");
-				return res.redirect('/signin');
+				return res.redirect("/signin");
 			}
 		})
 	})
@@ -97,7 +97,7 @@ exports.logout = function(req, res) {
 	// 需要同时删除session和已保存到本地的变量信息
 	delete req.session.user;
 	// delete app.locals.user;
-	res.redirect('/');
+	res.redirect("/");
 };
 
 // middleware
@@ -105,7 +105,7 @@ exports.signinRequired = function(req, res, next) {
 	var user = req.session.user;
 
 	if (!user) {
-		return res.redirect('/signin');
+		return res.redirect("/signin");
 	}
 	next();
 };
@@ -114,7 +114,7 @@ exports.adminRequired = function(req, res, next) {
 	var user = req.session.user;
 
 	if (!user.role || user.role <= 10) {
-		return res.redirect('/signin');
+		return res.redirect("/signin");
 	}
 	next();
 };

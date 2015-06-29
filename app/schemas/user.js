@@ -13,7 +13,10 @@ var UserSchema = new mongoose.Schema({
 	// 2:profession user
 	// >10:admin
 	// >50:supper admin
-	role: Number,     
+	role: {
+		type: Number,
+		default: 0
+	},
 	meta: {
 		createAt: {
 			type: Date,
@@ -46,7 +49,7 @@ UserSchema.pre("save", function(next) {
 			if (err) return next(err);
 
 			user.password = hash;
-			console.log("user.js: "+user)
+			console.log("user.js: " + user)
 			next();
 		})
 	})

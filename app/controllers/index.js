@@ -6,16 +6,15 @@ exports.index = function(req, res) {
 	Category
 		.find({})
 		.populate({
-			path: 'movies',
+			path: "movies",
 			options: {
 				// limit: 5
 			}
 		})
-		.sort({'meta.updateAt':-1})
+		.sort({"meta.updateAt":-1})
 		.exec(function(err, categories) {
 			if (err)
 				console.log(err);
-			debugger;
 			res.render("index", {
 				title: "imooc 首页",
 				categories: categories
@@ -24,6 +23,9 @@ exports.index = function(req, res) {
 };
 
 exports.search = function(req, res) {
+
+	console.log(req);
+
 	var cateId = req.query.cate;
 	var keyword = req.query.keyword; // 关键字搜索的关键字
 	var page = parseInt(req.query.p, 10) || 0; // 默认页数为1
@@ -37,8 +39,8 @@ exports.search = function(req, res) {
 				_id: cateId
 			})
 			.populate({
-				path: 'movies',
-				select: 'title poster'
+				path: "movies",
+				select: "title poster"
 			})
 			.exec(function(err, categories) {
 				var category = categories[0] || {};
