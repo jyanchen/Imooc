@@ -1,0 +1,41 @@
+extends ../../layout
+
+block content
+	.container.main
+		.row
+			table.table.table-hover.table-bordered
+				thead
+					tr
+						th 名字
+						th 录入时间
+						th 修改时间 
+						th 电影数
+						th 操作
+				tbody
+					- var tdCount = 5
+					tr
+						td(colspan=tdCount)
+							a.btn.btn-primary.btn-lg.btn-block(href="/admin/category/record", target="_blank") 新增分类
+					each cate in categories
+						tr(class="cate-item",cate-id="#{cate._id}")
+							td.name #{cate.name}
+							td #{moment(cate.meta.createAt).format("YYYY-MM-DD")}
+							td #{moment(cate.meta.updateAt).format("YYYY-MM-DD")}
+							td.detial 
+								span 共#{cate.movies.length}部
+							td.update
+								a.btn.btn-xs.btn-info(target="_blank",href="/admin/category/update/#{cate._id}") 修改
+								button.btn.btn-xs.btn-danger.del(type="button",data-id="#{cate._id}") 删除
+								button.btn.btn-xs.btn-primary.more(type="button") 查看详情
+						tr(class="titles",for="#{cate._id}")
+							td(colspan=tdCount)
+								if cate.movies.length
+									each movies in cate.movies
+										a.btn.btn-default(href="/movie/#{movies._id}",target="_blank") #{movies.title}
+								else
+									span 该分类下没有电影，去
+										a(href="/admin/movie/record", target="_blank") 录入电影
+	script
+		| $(".btn-primary").on("click",function(){
+		| 	$(this).parents("tr").toggleClass("active")
+		| })

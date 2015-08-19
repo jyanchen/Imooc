@@ -1,6 +1,7 @@
 ﻿# 此为注释 – 将被 Git 忽略
 # 忽略所有 .a 结尾的文件
 #*.a 
+*.scssc
 # 但 lib.a 除外
 #!lib.a
 # 仅仅忽略项目根目录下的 TODO 文件，不包括 subdir/TODO 
@@ -8,5 +9,10 @@
 # 忽略 build/ 目录下的所有文件
 .idea/
 node_modules/
+public/upload/
+public/webcomponentsjs
+public/polymer
+nvm/
+nvmw/
 # 会忽略 doc/notes.txt 但不包括 doc/server/arch.txt
 #doc/*.txt

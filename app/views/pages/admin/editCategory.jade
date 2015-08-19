@@ -1,0 +1,16 @@
+extends ../../layout
+
+block content
+	.container.main
+		.row
+			form.form-horizontal(method="post",action="/admin/category")
+				.form-group
+					label.col-md-1.control-label(for="inputCategories") 电影分类
+					.col-md-11
+						if category == null
+							input#inputCatetories.form-control(type="text",name="category[name]",value="")
+						else
+							input#inputCatetories.form-control(type="text",name="category[name]",value=category.name)
+				.form-group
+					.col-sm-offset-2.col-md-11
+					button.btn.btn-block.btn-lg.btn-success(type="submit") 保存
