@@ -6,8 +6,8 @@ module.exports = function(grunt) {
         // metadata
         meta: {
             basePath: '/',
-            srcPath: 'public/css',
-            deployPath: 'public/build'
+            srcPath: 'public/dev/css',
+            deployPath: 'public/css'
         },
         banner: '/*! <%= pkg.name %> - v<%= pkg.version %> - ' +
             '<%= grunt.template.today("yyyy-mm-dd") %>\n' +
@@ -28,14 +28,14 @@ module.exports = function(grunt) {
                 }
             },
             uglify: {
-                files: ['public/**/*.js'],
-                tasks: ['jshint'],
+                files: ['public/dev/js/*.js'],
+                tasks: ['uglify'],
                 options: {
                     livereload: true
                 }
             },
             styles: {
-                files: ['<%= meta.srcPath %>/style.scss'],
+                files: ['<%= meta.srcPath %>/index.scss'],
                 tasks: ['sass'],
                 options: {
                     nospawn: true
@@ -47,7 +47,7 @@ module.exports = function(grunt) {
                 jshintrc: '.jshintrc',
                 ignores: ['public/libs/**/*.js']
             },
-            all: ['public/js/*.js', 'test/**/*.js', 'app/**/*.js']
+            all: ['public/dev/js/*.js', 'test/**/*.js', 'app/**/*.js']
         },
 
         // less: {
@@ -66,7 +66,7 @@ module.exports = function(grunt) {
         sass: {
             dist: {
                 files: {
-                    '<%= meta.deployPath %>/style.css': '<%= meta.srcPath %>/style.scss'
+                    '<%= meta.deployPath %>/index.css': '<%= meta.srcPath %>/index.scss'
                 },
                 options: {
                     sourcemap: false
@@ -76,11 +76,21 @@ module.exports = function(grunt) {
 
         uglify: {
             development: {
-                files: {
-                    'public/build/admin.min.js': 'public/js/admin.js',
-                    'public/build/detail.min.js': [
-                        'public/js/detail.js'
-                    ]
+                // files: {
+                //     'public/js/admin.min.js': 'public/dev/js/admin.js',
+                //     'public/js/detail.min.js': ['public/dev/js/detail.js'],
+                //     'public/js/index.min.js': ['public/dev/js/index.js'],
+                //     'public/js/ua.min.js': ['public/dev/js/ua.js'],
+                // }
+                files: [{
+                    expand: true,
+                    cwd: 'public/dev/js',
+                    src: '**/*.js',
+                    dest: 'public/js'
+                }],
+                options: {
+                    mangle: false,
+                    beautify:true
                 }
             }
         },
@@ -121,8 +131,8 @@ module.exports = function(grunt) {
         //     }
         // },
         concurrent: {
-            // tasks: ["nodemon", "watch","jshint","uglify","less"], 
-            tasks: ["nodemon", "watch", "sass"],
+            tasks: ["nodemon", "watch", "sass", "uglify"],
+            // tasks: ["nodemon", "watch", "sass", "jshint", "uglify"],
             options: {
                 logConcurrentOutput: true
             }
@@ -136,10 +146,11 @@ module.exports = function(grunt) {
     // grunt.loadNpmTasks('grunt-browser-sync'); // 同步测试移动端
     // grunt.loadNpmTasks("grunt-mocha-test"); // 测试框架
     // grunt.loadNpmTasks("grunt-contrib-jshint");
-    // grunt.loadNpmTasks("grunt-contrib-uglify");
+    grunt.loadNpmTasks("grunt-contrib-uglify");
     // grunt.loadNpmTasks("grunt-contrib-less");
 
     grunt.option("force", true); // 忽略一些语法性的错误而导致任务终止
     grunt.registerTask("default", ["concurrent"]); // 默认任务
+    grunt.registerTask("compress", ["uglify", "sass"]);
     // grunt.registerTask("test", ["mochaTest"]); // 测试
 }

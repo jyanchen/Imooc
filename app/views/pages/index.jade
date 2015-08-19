@@ -1,23 +1,91 @@
 extends ../layout
 
 block content
-	.container.main
+	.Jr-slider-wrapper
+		.carousel.slide#Jr-slider(,data-ride='carousel')
+			ol.carousel-indicators
+				li.active(data-target='#Jr-slider',data-slide-to='0')
+				li(data-target='#Jr-slider',data-slide-to='1')
+				li(data-target='#Jr-slider',data-slide-to='2')
+			.carousel-inner(role='listbox')
+				.item.active
+					img(src="/imgs/slide01.jpeg")
+				.item
+					img(src="/imgs/slide02.jpg")
+				.item
+					img(src="/imgs/slide03.jpg")
+			a.left.carousel-control(href="#Jr-slider",role="button",data-slide="prev")
+				span.glyphicon.glyphicon-chevron-left(aria-hidden="true")
+				span.sr-only Previous
+			a.right.carousel-control(href="#Jr-slider",role="button",data-slide="next")
+				span.glyphicon.glyphicon-chevron-right(aria-hidden="true")
+				span.sr-only Next
+	.wrap.Jr-search
+		.container
+			.row
+				form(method='GET', action='/search')
+					.input-group.col-sm-12
+						input.form-control(type='text', name='q')
+						.input-group-btn.nav-sprite
+							button.nav-search-submit.nav-sprite(id="nav-search-submit")搜索
+	.container.Jr-change#Jr-change
 		.row
-			each cate in categories
-				.panel.panel-default
-					.panel-heading
-						h3 
-							a(href='/results?cate=#{cate._id}&p=0') #{cate.name}
-						.panel-body
-							if cate.movies && cate.movies.length > 0
-								each item in cate.movies
-									.col-md-2
-										.thumbnail
-											a(href="/movie/#{item._id}")
-												if item.poster.indexOf('http') > -1
-													img(src="#{item.poster}",alt="#{item.title}")
-												else
-													img(src="/upload/#{item.poster}",alt="#{item.title}")
-											.caption
-												h3 #{item.title}
-													p: a.btn.btn-primary(href="/movie/#{item._id}",role="button") 观看预告片
+			ul.nav-change(role='tablist')
+				li.nav-sprite.active(role="presentation")
+					a(href="#J_wish", aria-controls="J_wish", role="tab", data-toggle="tab",aria-expanded="true") 想看
+				li.nav-sprite(role="presentation")
+					a(href="#J_watched", aria-controls="J_watched", role="tab", data-toggle="tab",aria-expanded="false") 看过
+	.container.Jr-list#Jr-list
+		.row.tab-content
+			.tab-pane.active#J_wish(role="tabpanel")
+				if movies.wish && movies.wish.length
+					each item in movies.wish
+						.col-md-6
+							.thumbnail.clearfix
+								a.post(href="/movie/#{item._id}")
+									if item.poster.indexOf('http:') > -1
+										img(src="#{item.poster}", alt="#{item.title}")
+									else 
+										img(src="/upload/#{item.poster}", alt="#{item.title}")
+								.info
+									dl
+										dt 片名:
+										dd #{item.title}
+										dt 导演:
+										dd #{item.doctor}
+										dt 国家:
+										dd #{item.country}
+										dt 年代:
+										dd #{item.year}
+										dt 简介:
+										dd #{item.summary.substr(0,48)+"..."}
+								.like
+									//- span.badge #{cat.name}
+									span.badge #{moment(item.meta.createAt).format("YYYY/MM/DD")}
+									//- span.btn.btn-sm.btn-default 想看
+			.tab-pane#J_watched(role="tabpanel")
+				if movies.watched && movies.watched.length
+					each item in movies.watched
+						.col-md-6
+							.thumbnail.clearfix
+								a.post(href="/movie/#{item._id}")
+									if item.poster.indexOf('http:') > -1
+										img(src="#{item.poster}", alt="#{item.title}")
+									else 
+										img(src="/upload/#{item.poster}", alt="#{item.title}")
+								.info
+									dl
+										dt 片名:
+										dd #{item.title}
+										dt 导演:
+										dd #{item.doctor}
+										dt 国家:
+										dd #{item.country}
+										dt 年代:
+										dd #{item.year}
+										dt 简介:
+										dd #{item.summary.substr(0,48)+"..."}
+								.like
+									//- span.badge #{cat.name}
+									span.badge #{moment(item.meta.createAt).format("YYYY/MM/DD")}
+									//- span.btn.btn-sm.btn-default 看过

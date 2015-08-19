@@ -1,6 +1,6 @@
 var mongoose = require("mongoose");
 var bcrypt = require("bcrypt");
-var SALT_WORK_FACTOR = 0;
+var SALT_WORK_FACTOR = 10;
 
 var UserSchema = new mongoose.Schema({
 	name: {
@@ -17,6 +17,16 @@ var UserSchema = new mongoose.Schema({
 		type: Number,
 		default: 0
 	},
+	lastest:{ // 最近一次登录
+		_ip: {
+			type: String,
+			default: ""
+		},
+		time: {
+			type: Date,
+			default: Date.now()
+		}
+	},
 	meta: {
 		createAt: {
 			type: Date,
@@ -32,10 +42,10 @@ var UserSchema = new mongoose.Schema({
 UserSchema.pre("save", function(next) {
 	var user = this;
 
-	if (this.isNew) {
-		this.meta.createAt = this.meta.updateAt = Date.now();
+	if (user.isNew) {
+		user.meta.createAt = user.meta.updateAt = Date.now();
 	} else {
-		this.meta.updateAt = Date.now();
+		user.meta.updateAt = Date.now();
 	}
 
 	/*
@@ -49,7 +59,6 @@ UserSchema.pre("save", function(next) {
 			if (err) return next(err);
 
 			user.password = hash;
-			console.log("user.js: " + user)
 			next();
 		})
 	})

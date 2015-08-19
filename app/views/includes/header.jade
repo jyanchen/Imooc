@@ -1,13 +1,27 @@
-.container
-	.row
-		.page-header
-			ul.nav.nav-pills
-				li.active(role='presentation'): a(href='/') 首页
-				li(role='presentation'): a(href='/admin/movie/list') 列表
-				li(role='presentation'): a(href='/admin/movie/new') 录入电影
-				li(class='search col-sm-4 pull-right')
-					form(method='get',action='/results')
-						.input-group.col-sm-12
-							input.form-control(type='text',name='keyword')
-							span.input-group-btn
-								button.btn.btn-primary(type='submit') 搜索
+.navbar.navbar-inverse
+	.container
+		.navbar-header
+			button.navbar-toggle.collapsed(type='button',data-toggle='collapse',data-target='.navbar-collapse')
+				span.sr-only navigation
+				span.icon-bar
+				span.icon-bar
+				span.icon-bar
+			a.navbar-brand.hidden-sm(href='/') Jyan's 电影库
+		.navbar-collapse.collapse(role='navigation',aria-expanded='true')
+			ul.nav.navbar-nav
+				//- li(role='presentation'): a(href='/admin/movie/list',title='全部电影') 全部电影
+				li(role='presentation'): a(href='/admin/movie/record',title='上传电影') 上传电影
+				li(role='presentation'): a(href='/admin/movie/list',title='管理电影') 管理电影
+				li(role='presentation'): a(href='/admin/category/list',title='管理分类') 管理分类
+				li(role='presentation'): a(href='/admin/user/list',title='管理用户') 管理用户
+			ul.nav.navbar-nav.navbar-right.hidden-sm
+				if user && user.name != ""
+					li 
+						a.userName(href='####') #{user.name}
+					li 
+						a.logout(href='/logout',title='注销') 注销
+				else
+					li
+						a.login(href='/signin',title='登录') 登录
+					li
+						a.reg(href='/signup',title='注册') 注册

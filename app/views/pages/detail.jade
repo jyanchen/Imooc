@@ -4,8 +4,11 @@ block content
 	.container.main
 		.row.article
 			.col-md-7
-				.vedio
-					embed(src="#{movie.flash}",allowFullScreen="true",quality="high",width="100%",height="600",align="middle",type="application/x-shockwave-flash")
+				//- 有视频地址则添加视频模块
+				//- 否则空的视频地址会导致detail页面，被请求2次
+				if movie.flash
+					.vedio			
+						embed(src="#{movie.flash}",allowFullScreen="true",quality="high",width="100%",height="600",align="middle",type="application/x-shockwave-flash")
 				.comment
 					.panel.panel-default
 						.panel-heading
@@ -13,7 +16,7 @@ block content
 						.panel-body
 							ul.media-list
 								each item in comments
-									li.media										
+									li.media
 										.pull-left
 											a.user-portrait(href='#comments',data-cid='#{item._id}',data-tid='#{item.from._id}')
 												img.media-object(src='http://ucimg.ifeng.com/upload/4/229/dd051a9562650e28_1.jpg',width='64px',height='64px')
@@ -22,7 +25,7 @@ block content
 											p #{item.content}
 											if item.reply && item.reply.length > 0
 												each reply in item.reply
-													.media								
+													.media
 														.pull-left
 															a.user-portrait(href='#comments',data-cid='#{item._id}',data-tid='#{reply.from._id}')
 																img.media-object(src='http://ucimg.ifeng.com/upload/4/229/dd051a9562650e28_1.jpg',width='64px',height='64px')
@@ -33,7 +36,7 @@ block content
 															| #{reply.to.name} :
 															p #{reply.content}
 										hr
-					#comments					
+					#comments
 						form#commentFrom(method='post',action='/user/comment')
 							input(type='hidden',name='comment[movie]',value='#{movie._id}')
 							if user
@@ -50,6 +53,8 @@ block content
 					dd= movie.title
 					dt 导演
 					dd= movie.doctor
+					dt 类型
+					dd= category
 					dt 国家
 					dd= movie.country
 					dt 语言

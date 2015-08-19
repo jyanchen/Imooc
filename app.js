@@ -10,12 +10,10 @@ var port = process.env.PORT || 3000;
 var app = express();
 var multipart = require('connect-multiparty');
 var fs = require('fs');
-var dburl = "mongodb://localhost/imooc";
+var dburl = "mongodb://localhost/movieDB";
 
 // 连接数据库
 mongoose.connect(dburl);
-
-var isDev = true;
 
 // 加载模型
 var models_path = __dirname + '/app/models';
@@ -38,7 +36,7 @@ var walk = function(path) {
 walk(models_path);
 
 // 配置jade模版引擎
-app.set("views", "./app/views/pages");
+app.set("views", "./app/views/pages/");
 app.set("view engine", "jade");
 
 app.use(bodyParser.urlencoded({
@@ -50,7 +48,7 @@ app.use(bodyParser.json());
 // cookie相关的配置
 app.use(cookieParser());
 app.use(session({
-    secret: 'imooc',
+    secret: 'movieDB',
     resave: true,
     saveUninitialized: true,
     store: new mongoStore({
@@ -75,14 +73,5 @@ app.listen(port);
 app.locals.moment = require('moment');
 app.use(express.static(path.join(__dirname, "public")));
 
-if(isDev){
-    var bs = require('browser-sync').create();
-    bs.watch(["app/views/**","public/css/**"]).on("change", function() {
-        bs.reload();
-    });
-    bs.init({
-        proxy: "localhost:4000"
-    });
-}
 
-console.log("imooc started on port " + port);
+console.log("project movieDB started on port " + port);

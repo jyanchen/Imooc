@@ -10,21 +10,32 @@ block content
 						th 导演
 						th 国家
 						th 上映年份
+						th 类型
 						th 录入时间
+						th 最近修改
 						th pv
-						th 查看
-						th 更新
-						th 删除
+						th 操作
 				tbody
+					tr
+						td(colspan=9)
+							a.btn.btn-primary.btn-lg.btn-block(href="/admin/movie/record") 新增电影
 					each item in movies
 						tr(class="item-id-#{item._id}")
-							td.name #{item.title}
+							td.name 
+								a(target="_blank",href="/movie/#{item._id}",title="#{item.title}") 
+									if item.watched
+										span.btn.btn-xs.btn-success 看过
+									else 
+										span.btn.btn-xs.btn-warning 想看
+									| &nbsp;#{item.title}
 							td.director #{item.doctor}
 							td.nation #{item.country}
 							td.year #{item.year}
-							td #{moment(item.meta.creatAt).format("MM/DD/YYYY")}
+							td #{item.category.name}
+							td #{moment(item.meta.createAt).format("YYYY/MM/DD")}
+							td #{moment(item.meta.updateAt).format("YYYY/MM/DD")}
 							td #{item.pv}
-							td.detial: a(target="_blank",href="/movie/#{item._id}") 查看
-							td.update: a(target="_blank",href="/admin/movie/update/#{item._id}") 修改
-							td.delete: button.btn.btn-xs.btn-danger.del(type="button",data-id="#{item._id}") 删除
+							td.update 
+								a.btn.btn-xs.btn-info(target="_blank",href="/admin/movie/update/#{item._id}") 修改
+								button.btn.btn-xs.btn-danger.del(type="button",data-id="#{item._id}") 删除
 	script(src="/js/admin.js")

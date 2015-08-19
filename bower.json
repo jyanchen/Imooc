@@ -1,17 +1,16 @@
 {
-  "name": "imooc",
+  "name": "movieDB",
   "version": "0.0.1",
   "homepage": "https://github.com/jyanchen/Imooc",
   "authors": [
     "JyanChan <ijyan.chen@gmail.com>"
   ],
-  "description": "imooc movie",
+  "description": "movieDB",
   "keywords": [
-    "imooc",
+    "movieDB",
     "movie"
   ],
   "license": "MIT",
-  "private": true,
   "ignore": [
     "**/.*",
     "node_modules",
@@ -21,6 +20,7 @@
     "tests"
   ],
   "dependencies": {
-    "bootstrap": "~3.3.1"
+    "bootstrap": "~3.3.1",
+    "polymer": "Polymer/polymer#^1.0.0"
   }
 }
